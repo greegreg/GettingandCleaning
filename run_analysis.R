@@ -10,7 +10,7 @@ dateDownloaded<-date()
 
 #### Loading files ####
 ### First loade the training data
-setwd("p://CDP/GettingandCleaning/")
+
 XTrain<-read.table("./EXTFile/UCI HAR Dataset/train/X_train.txt", header=FALSE)
 yTrain<-read.table("./EXTFile/UCI HAR Dataset/train/y_train.txt", header=FALSE)
 SubTrain<-read.table("./EXTFile/UCI HAR Dataset/train/subject_train.txt", header=FALSE)
@@ -48,34 +48,34 @@ vn<-read.table("./EXTFile/UCI HAR Dataset/features.txt",header=FALSE)
 
 ###Need to extract the location of the means and standard deviations.
 
-f<-function(x){
-    a<-x#use a local vairable
-    b<-sub(".*?-(.*?)(-.*|$)","\\1",a)
-    if(b=="mean()"){
-        T<-TRUE
-    }else if(b=="std()"){
-        T<-TRUE
-    }else{
-        T<-FALSE
-    }
-    return(T)
-}
+mn<-grep("mean",vn[[2]]) #Extracts the position of the names containing "mean"
+MN<-grep("Mean",vn[[2]]) #Extracts the position of the names containing "Mean"
+st<-grep("std",vn[[2]]) #Extracts the position of the names containing "std"
 
-v<-vector()
-n<-length(vn[[2]])
-for(i in 1:n){
-    t<-vn[[2]][[i]]
-    t2<-f(t)
-    v<-c(v,t2)
-}
 
 ### Extract columns ###
-DTA<-DTA[,v] #This is a data.frame with mean and std measures
+DTAmn<-DTA[,mn] #will contain data containing only "mean" in their names
+DTAMN<-DTA[,MN] #Will contain data containing only "Mean" in their names
+DTAst<-DTA[,st] #will contian data containing only "std" in their names
+DTA<-cbind(DTAmn,DTAMN)
+DTA<-cbind(DTA,DTAst) #This is the end result I want
+rm(DTAmn)
+rm(DTAMN)
+rm(DTAst)
 
 ###Extract the Variable Names with mean or std within the name. Construct a vector that will be used to give the data frame columns their names
 
-vnp<-vn[v,] #This is a data frame
-rm(vn)
+vnpmn<-vn[mn,] #The following data frames are extracting names for us
+vnpMN<-vn[MN,]
+vnpst<-vn[st,]
+vnp<-rbind(vnpmn,vnpMN)
+vnp<-rbind(vnp,vnpst) #vn is now a data frame with only the names of the extracted variables.
+rm(mn)
+rm(MN)
+rm(st)
+rm(vnpmn)
+rm(vnpMN)
+rm(vnpst)
 
 ### need to coerce vnp column to a vector and then combine with vnames
 vn1<-vnp[[2]]
@@ -83,6 +83,8 @@ vn1<-as.character(vn1)
 vnames<-c("Person_ID","Activity_ID",vn1) #This vector contains the column names for the data frame.
 rm(vn1)
 rm(vnp)
+
+
 ###another bind
 DTA<-cbind(DTARL,DTA)
 names(DTA)<-vnames
@@ -105,7 +107,7 @@ DTA$fActivity<-factor(DTA$fActivity,levels=c(1,2,3,4,5,6),labels=c("Walking",'Wa
 
 head(DTA)
 
-Temp<-aggregate(DTA[,3:68],by=list(DTA$Person_ID,DTA$fActivity),FUN=mean,na.rm=TRUE)
+Temp<-aggregate(DTA[,3:88],by=list(DTA$Person_ID,DTA$fActivity),FUN=mean,na.rm=TRUE)
 names(Temp)[names(Temp)=="Group.1"]<-"Person_ID"
 names(Temp)[names(Temp)=="Group.2"]<-"Activity"
 
