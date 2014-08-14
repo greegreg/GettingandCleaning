@@ -2,7 +2,7 @@
 ### This file will contain the code for creating a tidey data set.
 
 ### Downloading and unzipping the data files
-setwd("p://CDP/")
+
 url<-"https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
 download.file(url,destfile="./zippedData")
 unzip("./zippedData",exdir="./EXTFile")
@@ -10,6 +10,7 @@ dateDownloaded<-date()
 
 #### Loading files ####
 ### First loade the training data
+setwd("p://CDP/GettingandCleaning/")
 XTrain<-read.table("./EXTFile/UCI HAR Dataset/train/X_train.txt", header=FALSE)
 yTrain<-read.table("./EXTFile/UCI HAR Dataset/train/y_train.txt", header=FALSE)
 SubTrain<-read.table("./EXTFile/UCI HAR Dataset/train/subject_train.txt", header=FALSE)

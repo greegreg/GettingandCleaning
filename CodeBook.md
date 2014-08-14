@@ -32,7 +32,7 @@ The first file describes each variable and what each variable is measuring. The 
 
 which represents the mean and standard deviation of each measured variable in each of three dimensions X, Y and Z. In the original data there were other variables, variables 555 - 561, with the word mean within the definition, but this analysis does not extract these variables.
 
-Accompanying these measures are two other variables. The first numerically identifies a participant while the second identifies the activity performed by each person. This information will be extracted and used in this analysis.
+Accompanying these measures are two other variables. The first numerically identifies a participant, "person_ID", while the second identifies the activity, "Activity_ID" performed by each person. This information will be extracted and used in this analysis.
 
 ## The Data
 
